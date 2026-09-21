@@ -11,8 +11,7 @@ export const siteConfig = {
   initials: "ATM",
   title: "Credit Analyst",
   tagline: "Turning complex financial profiles into confident lending decisions.",
-  // TODO: replace with your real deployed domain once live.
-  baseUrl: "https://anish-thapamagar.vercel.app",
+  baseUrl: "https://anesh-thapa.vercel.app",
   locationShort: "Nepal & Australia",
   email: "anish.thapamagar@example.com", // PLACEHOLDER — replace with real email
   linkedin: "https://www.linkedin.com/in/anesh-thapa-magar-aa29501a0/",
