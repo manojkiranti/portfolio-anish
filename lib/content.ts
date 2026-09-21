@@ -7,7 +7,7 @@
 // ---------------------------------------------------------------------------
 
 export const siteConfig = {
-  name: "Anish Thapa Magar",
+  name: "Anesh Thapa Magar",
   initials: "ATM",
   title: "Credit Analyst",
   tagline: "Turning complex financial profiles into confident lending decisions.",
@@ -15,8 +15,9 @@ export const siteConfig = {
   baseUrl: "https://anish-thapamagar.vercel.app",
   locationShort: "Nepal & Australia",
   email: "anish.thapamagar@example.com", // PLACEHOLDER — replace with real email
-  linkedin: "https://linkedin.com/in/anish-thapa-magar", // PLACEHOLDER — verify/replace
+  linkedin: "https://www.linkedin.com/in/anesh-thapa-magar-aa29501a0/",
   resumeUrl: "/resume.pdf", // add the real file to /public/resume.pdf
+  avatarImage: "/profile.jpg",
 };
 
 export const heroStats = [
@@ -29,7 +30,7 @@ export const heroStats = [
 export const about = {
   heading: "About",
   paragraphs: [
-    "Anish is a Credit Analyst with four years of experience assessing residential and investment lending applications for Australian borrowers. Splitting his time between Nepal and Australia, he combines meticulous financial analysis with a genuine understanding of the pressures brokers and clients face when navigating a loan application.",
+    "Anesh is a Credit Analyst with four years of experience assessing residential and investment lending applications for Australian borrowers. Splitting his time between Nepal and Australia, he combines meticulous financial analysis with a genuine understanding of the pressures brokers and clients face when navigating a loan application.",
     "At ODIN Mortgage, an Australian mortgage broker, he works closely with brokers to structure serviceability calculations, verify supporting documentation, and get complex applications loan-ready — turning around clean, lender-friendly submissions that move files forward with fewer conditions and less back-and-forth.",
   ],
 };
@@ -113,14 +114,14 @@ export type EducationEntry = {
 
 export const education: EducationEntry[] = [
   {
-    qualification: "Bachelor's Degree in Finance", // PLACEHOLDER
-    institution: "[University Name], Nepal", // PLACEHOLDER
-    period: "2016 — 2020", // PLACEHOLDER
+    qualification: "Bachelor of Business Administration (BBA)",
+    institution: "Tribhuvan University, Nepal",
+    period: "2018 — 2024",
   },
   {
-    qualification: "Certificate IV in Finance and Mortgage Broking", // PLACEHOLDER — confirm exact cert held
-    institution: "[Issuing Institution], Australia", // PLACEHOLDER
-    period: "2022", // PLACEHOLDER
+    qualification: "Master of Arts in Economics",
+    institution: "Tribhuvan University, Nepal",
+    period: "2024 — Present", // PLACEHOLDER — confirm exact end year
   },
 ];
 
@@ -132,7 +133,7 @@ export const contactCards = [
   },
   {
     label: "LinkedIn",
-    value: "linkedin.com/in/anish-thapa-magar",
+    value: "linkedin.com/in/anesh-thapa-magar-aa29501a0",
     href: siteConfig.linkedin,
   },
   {

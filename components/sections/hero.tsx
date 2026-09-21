@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, FileText, MapPin } from "lucide-react";
@@ -17,6 +17,7 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto max-w-4xl px-4 flex flex-col items-center text-center gap-7 animate-fade-in-up">
         <Avatar className="size-28 sm:size-32 border-4 border-card shadow-xl animate-float">
+          <AvatarImage src={siteConfig.avatarImage} alt={siteConfig.name} />
           <AvatarFallback className="bg-primary text-primary-foreground text-3xl">
             {siteConfig.initials}
           </AvatarFallback>
