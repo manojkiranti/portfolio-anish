@@ -1,24 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Libre_Franklin } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { siteConfig } from "@/lib/content";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const franklin = Libre_Franklin({
+  variable: "--font-franklin",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
 });
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f7f8fb" },
-    { media: "(prefers-color-scheme: dark)", color: "#070b16" },
+    { media: "(prefers-color-scheme: light)", color: "#F3F6F1" },
+    { media: "(prefers-color-scheme: dark)", color: "#0E1511" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -85,7 +81,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>
+      <body className={`${franklin.variable} font-sans antialiased`}>
         <ThemeProvider>
           {children}
           <JsonLd />
