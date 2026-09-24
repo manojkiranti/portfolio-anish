@@ -106,10 +106,8 @@ export const skillGroups: SkillGroup[] = [
 ];
 
 export const toolkit = {
-  eyebrow: "Interactive",
-  heading: "Credit Toolkit",
-  intro:
-    "The core checks behind a credit assessment, as working calculators. Change the numbers and follow the logic: how the assessment buffer shapes borrowing power, why LVR and DTI bands matter, and what makes a file ready to submit.",
+  heading: "Credit toolkit",
+  intro: "The core checks behind a credit assessment, as working calculators.",
   disclaimer:
     "Illustrative only. These tools show general assessment logic. They are not financial advice or credit assistance, and every lender's policy differs. Nothing you enter leaves your browser.",
 };

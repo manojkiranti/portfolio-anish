@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { ASSUMPTIONS, calculateServiceability } from "@/lib/calculators";
-import { formatCurrency, formatNumber, formatPct, formatYears } from "@/lib/format";
-import { Headline, Note, NumberField, Worksheet } from "@/components/calculators/parts";
+import { formatAccounting, formatCurrency, formatNumber, formatPct, formatYears } from "@/lib/format";
+import { Note, NumberField, Worksheet } from "@/components/calculators/parts";
 
 export function ServiceabilityCalculator() {
   const [netMonthlyIncome, setNetMonthlyIncome] = useState(9_000);
@@ -22,11 +22,12 @@ export function ServiceabilityCalculator() {
     annualRatePct,
     termYears: term,
   });
+  const surplus = Math.round(r.monthlySurplus);
   const hasCapacity = r.maxLoan > 0;
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 content-start">
+      <div className="grid content-start gap-4 sm:grid-cols-2 lg:grid-cols-1">
         <NumberField
           label="Net monthly income (after tax)"
           prefix="$"
@@ -62,64 +63,51 @@ export function ServiceabilityCalculator() {
             value={annualRatePct}
             onChange={setAnnualRatePct}
           />
-          <NumberField
-            label="Loan term"
-            suffix="years"
-            value={termYears}
-            onChange={setTermYears}
-          />
+          <NumberField label="Loan term" suffix="years" value={termYears} onChange={setTermYears} />
         </div>
       </div>
 
-      <div className="space-y-5">
-        <Headline
-          label="Indicative borrowing capacity"
-          value={hasCapacity ? formatCurrency(r.maxLoan) : "No capacity"}
-          sub={
-            hasCapacity
-              ? `Principal & interest over ${formatYears(term)}, assessed at ${formatPct(r.assessmentRatePct, 2)}.`
-              : `Commitments exceed income by ${formatCurrency(-r.monthlySurplus)} a month on these numbers.`
-          }
-        />
-
+      <div className="space-y-4">
         <Worksheet
+          caption="Monthly figures, AUD"
           rows={[
-            { label: "Net monthly income", value: formatCurrency(netMonthlyIncome) },
-            { op: "−", label: "Living expenses", value: formatCurrency(monthlyExpenses) },
-            { op: "−", label: "Other loan repayments", value: formatCurrency(otherMonthlyRepayments) },
+            { label: "Net monthly income", value: formatAccounting(netMonthlyIncome) },
+            { label: "Living expenses", value: formatAccounting(monthlyExpenses, { deduct: true }) },
+            { label: "Other loan repayments", value: formatAccounting(otherMonthlyRepayments, { deduct: true }) },
             {
-              op: "−",
-              label: `Credit cards (${formatNumber(ASSUMPTIONS.creditCardMonthlyFactor * 100, 1)}% of limits)`,
-              value: formatCurrency(r.creditCardCommitment),
+              label: `Credit cards, ${formatNumber(ASSUMPTIONS.creditCardMonthlyFactor * 100, 1)}% of limits`,
+              value: formatAccounting(r.creditCardCommitment, { deduct: true }),
             },
+            { kind: "subtotal", label: "Surplus for the new loan", value: formatAccounting(r.monthlySurplus) },
             {
-              op: "=",
-              label: "Surplus available for the new loan",
-              value: formatCurrency(r.monthlySurplus),
-              strong: true,
-            },
-            {
+              kind: "note",
               label: `Assessment rate: ${formatPct(annualRatePct, 2)} + ${formatPct(ASSUMPTIONS.serviceabilityBufferPct, 1)} buffer`,
               value: formatPct(r.assessmentRatePct, 2),
+            },
+            {
+              kind: "total",
+              label: "Borrowing capacity",
+              value: hasCapacity ? formatCurrency(r.maxLoan) : "No capacity",
             },
           ]}
         />
 
-        {hasCapacity && (
-          <div className="rounded-xl border border-accent/30 bg-accent/5 p-4 text-sm leading-relaxed">
-            <p className="font-semibold">Why the buffer matters</p>
-            <p className="mt-1 text-muted-foreground">
-              At the actual {formatPct(annualRatePct, 2)} rate, this loan costs{" "}
-              <span className="font-semibold text-foreground">
-                {formatCurrency(r.repaymentAtActualRate)}/month
-              </span>
-              , leaving{" "}
-              <span className="font-semibold text-foreground">
-                {formatCurrency(r.bufferHeadroom)}/month
-              </span>{" "}
-              of headroom. That headroom is what lets the borrower absorb rate rises.
-            </p>
-          </div>
+        {hasCapacity ? (
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            <span className="font-bold text-foreground">Why the buffer matters.</span> At the actual{" "}
+            {formatPct(annualRatePct, 2)} rate over {formatYears(term)}, this loan costs{" "}
+            <span className="font-semibold text-foreground">{formatCurrency(r.repaymentAtActualRate)}/month</span>,
+            leaving{" "}
+            <span className="font-semibold text-foreground">{formatCurrency(r.bufferHeadroom)}/month</span> of
+            headroom. That headroom is what lets the borrower absorb rate rises.
+          </p>
+        ) : (
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            <span className="font-bold text-foreground">No capacity on these numbers.</span>{" "}
+            {surplus < 0
+              ? `Commitments exceed income by ${formatCurrency(-surplus)} a month.`
+              : "Commitments use the whole income, leaving nothing for a new loan."}
+          </p>
         )}
 
         <Note>

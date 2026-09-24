@@ -36,8 +36,8 @@ export function NumberField({
       <label htmlFor={id} className="block text-sm font-medium">
         {label}
       </label>
-      <div className="flex items-center rounded-xl border border-input bg-background transition focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/40">
-        {prefix && <span className="pl-3 text-sm text-muted-foreground">{prefix}</span>}
+      <div className="flex items-center rounded-md border border-input bg-card focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-ring">
+        {prefix && <span className="pl-3 text-[0.9375rem] text-muted-foreground">{prefix}</span>}
         <input
           id={id}
           inputMode="decimal"
@@ -51,12 +51,12 @@ export function NumberField({
             onChange(parseAmount(cleaned));
           }}
           onBlur={() => setDraft(null)}
-          className="w-full min-w-0 bg-transparent px-3 py-2.5 text-sm tabular-nums outline-none"
+          className="w-full min-w-0 bg-transparent px-3 py-2.5 text-[0.9375rem] tabular-nums outline-none"
         />
-        {suffix && <span className="pr-3 text-sm text-muted-foreground whitespace-nowrap">{suffix}</span>}
+        {suffix && <span className="pr-3 text-sm whitespace-nowrap text-muted-foreground">{suffix}</span>}
       </div>
       {hint && (
-        <p id={`${id}-hint`} className="text-xs text-muted-foreground">
+        <p id={`${id}-hint`} className="text-[0.8125rem] leading-snug text-muted-foreground">
           {hint}
         </p>
       )}
@@ -77,16 +77,16 @@ export function ChoiceField<T extends string>({
 }) {
   const name = useId();
   return (
-    <fieldset className="space-y-1.5">
+    <fieldset>
       <legend className="mb-1.5 text-sm font-medium">{label}</legend>
-      <div className="flex flex-wrap gap-1 rounded-xl border border-input bg-background p-1">
+      <div className="flex flex-wrap gap-1 rounded-md border border-input bg-card p-1">
         {options.map((option) => (
           <label
             key={option.value}
             className={cn(
-              "flex-1 cursor-pointer rounded-lg px-3 py-1.5 text-center text-sm font-medium transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring",
+              "flex-1 cursor-pointer rounded-sm px-3 py-1.5 text-center text-[0.9375rem] transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
               value === option.value
-                ? "bg-secondary text-foreground"
+                ? "bg-secondary font-semibold text-foreground"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
@@ -106,18 +106,18 @@ export function ChoiceField<T extends string>({
   );
 }
 
-const toneClasses: Record<Tone, string> = {
-  good: "bg-success/10 text-success border-success/30",
-  caution: "bg-warning/10 text-warning border-warning/30",
-  risk: "bg-destructive/10 text-destructive border-destructive/30",
+const toneText: Record<Tone, string> = {
+  good: "text-success",
+  caution: "text-warning",
+  risk: "text-destructive",
 };
 
-export function ToneBadge({ tone, children }: { tone: Tone; children: ReactNode }) {
+export function Flag({ tone, children }: { tone: Tone; children: ReactNode }) {
   return (
     <span
       className={cn(
-        "inline-flex w-fit items-center rounded-full border px-3 py-1 text-xs font-semibold",
-        toneClasses[tone]
+        "inline-flex w-fit items-center rounded-sm border border-current px-2 py-0.5 text-[0.8125rem] font-semibold",
+        toneText[tone]
       )}
     >
       {children}
@@ -137,42 +137,59 @@ export function Headline({
   return (
     <div className="space-y-1" aria-live="polite">
       <p className="text-sm text-muted-foreground">{label}</p>
-      <p className="text-3xl sm:text-4xl font-extrabold tracking-tight tabular-nums text-accent-strong dark:text-accent">
-        {value}
-      </p>
+      <p className="text-3xl font-extrabold tracking-tight tabular-nums sm:text-4xl">{value}</p>
       {sub && <p className="text-sm text-muted-foreground">{sub}</p>}
     </div>
   );
 }
 
 export type WorksheetRow = {
-  op?: "−" | "+" | "=" | "×";
   label: ReactNode;
   value: ReactNode;
-  strong?: boolean;
+  kind?: "line" | "subtotal" | "note" | "total";
 };
 
-export function Worksheet({ rows }: { rows: WorksheetRow[] }) {
+export function Worksheet({ rows, caption }: { rows: WorksheetRow[]; caption?: ReactNode }) {
   return (
-    <dl className="divide-y divide-border rounded-xl border border-border text-sm">
-      {rows.map((row, i) => (
-        <div
-          key={i}
-          className={cn(
-            "flex items-baseline justify-between gap-4 px-4 py-2.5",
-            row.strong && "bg-secondary/60 font-semibold"
-          )}
-        >
-          <dt className="flex gap-2 text-muted-foreground">
-            <span aria-hidden className="w-3 shrink-0 text-center font-mono">
-              {row.op ?? "\u00a0"}
-            </span>
-            <span className={cn(row.strong && "text-foreground")}>{row.label}</span>
-          </dt>
-          <dd className="shrink-0 tabular-nums">{row.value}</dd>
-        </div>
-      ))}
-    </dl>
+    <div className="relative rounded-md border border-border bg-card py-3 pr-5 pl-10 tabular-nums lining-nums before:absolute before:inset-y-0 before:left-6 before:w-px before:bg-margin">
+      {caption && (
+        <p className="mb-2 flex items-baseline justify-between gap-4 text-[0.8125rem] text-muted-foreground">
+          {caption}
+        </p>
+      )}
+      <dl>
+        {rows.map((row, i) => (
+          <WorksheetLine key={i} row={row} />
+        ))}
+      </dl>
+    </div>
+  );
+}
+
+function WorksheetLine({ row }: { row: WorksheetRow }) {
+  const kind = row.kind ?? "line";
+  if (kind === "total") {
+    return (
+      <div className="flex items-baseline justify-between gap-4 pt-4 pb-2">
+        <dt className="text-[1.0625rem] font-extrabold">{row.label}</dt>
+        <dd aria-live="polite" className="relative text-[1.625rem] leading-none font-extrabold tracking-[-0.01em]">
+          {row.value}
+          <span aria-hidden className="absolute inset-x-0 -bottom-2 h-1 border-y border-margin" />
+        </dd>
+      </div>
+    );
+  }
+  return (
+    <div
+      className={cn(
+        "grid grid-cols-[1fr_auto] items-baseline gap-x-4 border-b border-border text-[0.9375rem]",
+        kind === "subtotal" && "-mt-px border-t border-t-foreground font-bold",
+        kind === "note" && "text-sm text-muted-foreground"
+      )}
+    >
+      <dt className="py-2">{row.label}</dt>
+      <dd className="py-2 text-right">{row.value}</dd>
+    </div>
   );
 }
 
@@ -193,15 +210,11 @@ export function Meter({
   const fill = { good: "bg-success", caution: "bg-warning", risk: "bg-destructive" }[tone];
   return (
     <div role="img" aria-label={label} className="pt-1 pb-5">
-      <div className="relative h-2.5 rounded-full bg-secondary">
-        <div className={cn("h-full rounded-full transition-all", fill)} style={{ width: `${pct}%` }} />
+      <div className="relative h-2 rounded-sm bg-secondary">
+        <div className={cn("h-full rounded-sm transition-[width]", fill)} style={{ width: `${pct}%` }} />
         {marks.map((mark) => (
-          <div
-            key={mark.at}
-            className="absolute top-0 h-full"
-            style={{ left: `${(mark.at / max) * 100}%` }}
-          >
-            <div className="h-full w-0.5 -translate-x-1/2 bg-foreground/30" />
+          <div key={mark.at} className="absolute top-0 h-full" style={{ left: `${(mark.at / max) * 100}%` }}>
+            <div className="h-full w-px -translate-x-1/2 bg-foreground/40" />
             {mark.label && (
               <span className="absolute top-3.5 -translate-x-1/2 text-[11px] text-muted-foreground tabular-nums">
                 {mark.label}

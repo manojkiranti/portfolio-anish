@@ -3,7 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { ASSUMPTIONS, calculateLvrDti, type Tone } from "@/lib/calculators";
 import { formatCurrency, formatPct } from "@/lib/format";
-import { Meter, Note, NumberField, ToneBadge } from "@/components/calculators/parts";
+import { Flag, Meter, Note, NumberField } from "@/components/calculators/parts";
 
 export function LvrDtiCalculator() {
   const [propertyValue, setPropertyValue] = useState(850_000);
@@ -119,10 +119,10 @@ function RatioCard({
   children: ReactNode;
 }) {
   return (
-    <div className="rounded-xl border border-border p-5 space-y-3" aria-live="polite">
+    <div className="space-y-3 rounded-md border border-border bg-card p-5" aria-live="polite">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm font-medium text-muted-foreground">{title}</p>
-        {band && <ToneBadge tone={band.tone}>{band.label}</ToneBadge>}
+        {band && <Flag tone={band.tone}>{band.label}</Flag>}
       </div>
       <p className="text-3xl font-extrabold tracking-tight tabular-nums">{value}</p>
       {meter}

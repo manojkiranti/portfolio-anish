@@ -91,26 +91,24 @@ export function RepaymentCalculator() {
                 ]
               : []),
             { label: "Total interest", value: formatCurrency(r.totalInterest) },
-            { op: "=" as const, label: "Total repaid", value: formatCurrency(r.totalPaid), strong: true },
+            { kind: "total" as const, label: "Total repaid", value: formatCurrency(r.totalPaid) },
           ]}
         />
 
         {type === "io" && r.revertRepayment !== undefined && (
-          <div className="rounded-xl border border-warning/30 bg-warning/5 p-4 text-sm leading-relaxed">
-            <p className="font-semibold">Repayment shock at the end of interest-only</p>
-            <p className="mt-1 text-muted-foreground">
-              Repayments rise by{" "}
-              <span className="font-semibold text-foreground">
-                {formatCurrency(jump)}/{per} ({formatPct(jumpPct, 0)})
-              </span>{" "}
-              when the interest-only period ends, and interest-only costs{" "}
-              <span className="font-semibold text-foreground">
-                {formatCurrency(r.totalInterest - pi.totalInterest)}
-              </span>{" "}
-              more in total than P&amp;I from day one. Lenders assess the higher P&amp;I repayment
-              over the shorter remaining term.
-            </p>
-          </div>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            <span className="font-bold text-warning">Repayment jump when interest-only ends.</span>{" "}
+            Repayments rise by{" "}
+            <span className="font-semibold text-foreground">
+              {formatCurrency(jump)}/{per} ({formatPct(jumpPct, 0)})
+            </span>
+            , and interest-only costs{" "}
+            <span className="font-semibold text-foreground">
+              {formatCurrency(r.totalInterest - pi.totalInterest)}
+            </span>{" "}
+            more in total than P&amp;I from day one. Lenders assess the higher P&amp;I repayment over
+            the shorter remaining term.
+          </p>
         )}
 
         <Note>

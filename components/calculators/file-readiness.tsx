@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Check } from "lucide-react";
 import { assessReadiness, type IncomeType, type Tone } from "@/lib/calculators";
 import { checklistGroups } from "@/lib/content";
-import { ChoiceField, Note, ToneBadge } from "@/components/calculators/parts";
+import { ChoiceField, Flag, Note } from "@/components/calculators/parts";
 import { cn } from "@/lib/utils";
 
 const allItems = checklistGroups.flatMap((group) => group.items);
@@ -27,20 +27,21 @@ const VERDICT: Record<"ready" | "nearly" | "not-ready", { label: string; tone: T
   },
 };
 
+const FILL: Record<Tone, string> = { good: "bg-success", caution: "bg-warning", risk: "bg-destructive" };
+
 export function FileReadinessChecklist() {
   const [incomeType, setIncomeType] = useState<IncomeType>("payg");
   const [checked, setChecked] = useState<string[]>(["id", "payslips"]);
 
   const r = assessReadiness(allItems, checked, incomeType);
   const verdict = VERDICT[r.verdict];
-  const fill = { good: "bg-success", caution: "bg-warning", risk: "bg-destructive" }[verdict.tone];
 
   const toggle = (id: string) =>
     setChecked((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
-      <div className="space-y-5">
+      <div className="space-y-6">
         <ChoiceField
           label="Main income type"
           value={incomeType}
@@ -56,46 +57,33 @@ export function FileReadinessChecklist() {
           if (!items.length) return null;
           return (
             <fieldset key={group.heading} className="space-y-2">
-              <legend className="mb-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                {group.heading}
-              </legend>
+              <legend className="mb-2 text-sm font-semibold text-muted-foreground">{group.heading}</legend>
               {items.map((item) => {
                 const on = checked.includes(item.id);
                 return (
                   <label
                     key={item.id}
                     className={cn(
-                      "flex cursor-pointer items-start gap-3 rounded-xl border p-3 transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring",
-                      on ? "border-success/40 bg-success/5" : "border-border hover:border-accent/40"
+                      "flex cursor-pointer items-start gap-3 rounded-md border bg-card p-3 transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
+                      on ? "border-success" : "border-border hover:border-input"
                     )}
                   >
-                    <input
-                      type="checkbox"
-                      checked={on}
-                      onChange={() => toggle(item.id)}
-                      className="sr-only"
-                    />
+                    <input type="checkbox" checked={on} onChange={() => toggle(item.id)} className="sr-only" />
                     <span
                       aria-hidden
                       className={cn(
-                        "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border transition",
-                        on ? "border-success bg-success text-white dark:text-background" : "border-muted-foreground/60 bg-background"
+                        "mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-sm border",
+                        on ? "border-success bg-success text-card" : "border-input bg-card"
                       )}
                     >
                       {on && <Check className="size-3.5" strokeWidth={3} />}
                     </span>
                     <span className="space-y-0.5">
-                      <span className="flex flex-wrap items-center gap-2 text-sm font-medium">
+                      <span className="flex flex-wrap items-center gap-2 text-[0.9375rem] font-medium">
                         {item.label}
-                        {item.critical && (
-                          <span className="rounded-full bg-destructive/10 px-2 py-0.5 text-[11px] font-semibold text-destructive">
-                            Critical
-                          </span>
-                        )}
+                        {item.critical && <Flag tone="risk">Critical</Flag>}
                       </span>
-                      {item.hint && (
-                        <span className="block text-xs text-muted-foreground">{item.hint}</span>
-                      )}
+                      {item.hint && <span className="block text-[0.8125rem] text-muted-foreground">{item.hint}</span>}
                     </span>
                   </label>
                 );
@@ -105,10 +93,10 @@ export function FileReadinessChecklist() {
         })}
       </div>
 
-      <div className="lg:sticky lg:top-28 h-fit space-y-4 rounded-xl border border-border p-5" aria-live="polite">
+      <div className="h-fit space-y-4 rounded-md border border-border bg-card p-5 lg:sticky lg:top-20" aria-live="polite">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-sm font-medium text-muted-foreground">File status</p>
-          <ToneBadge tone={verdict.tone}>{verdict.label}</ToneBadge>
+          <Flag tone={verdict.tone}>{verdict.label}</Flag>
         </div>
         <p className="text-3xl font-extrabold tracking-tight tabular-nums">{r.completedPct}%</p>
         <div
@@ -117,9 +105,9 @@ export function FileReadinessChecklist() {
           aria-valuenow={r.completedPct}
           aria-valuemin={0}
           aria-valuemax={100}
-          className="h-2.5 rounded-full bg-secondary"
+          className="h-2 rounded-sm bg-secondary"
         >
-          <div className={cn("h-full rounded-full transition-all", fill)} style={{ width: `${r.completedPct}%` }} />
+          <div className={cn("h-full rounded-sm transition-[width]", FILL[verdict.tone])} style={{ width: `${r.completedPct}%` }} />
         </div>
         <p className="text-sm text-muted-foreground">{verdict.note}</p>
 
@@ -127,7 +115,11 @@ export function FileReadinessChecklist() {
           <MissingList title="Blocking" items={r.missingCritical.map((i) => i.label)} tone="risk" />
         )}
         {r.missingOther.length > 0 && (
-          <MissingList title="Will likely come back as conditions" items={r.missingOther.map((i) => i.label)} tone="caution" />
+          <MissingList
+            title="Will likely come back as conditions"
+            items={r.missingOther.map((i) => i.label)}
+            tone="caution"
+          />
         )}
 
         <Note>A typical document list. Each lender and scenario adds its own requirements.</Note>
@@ -139,9 +131,7 @@ export function FileReadinessChecklist() {
 function MissingList({ title, items, tone }: { title: string; items: string[]; tone: Tone }) {
   return (
     <div className="space-y-1.5">
-      <p className={cn("text-xs font-semibold uppercase tracking-widest", tone === "risk" ? "text-destructive" : "text-warning")}>
-        {title}
-      </p>
+      <p className={cn("text-sm font-semibold", tone === "risk" ? "text-destructive" : "text-warning")}>{title}</p>
       <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
         {items.map((item) => (
           <li key={item}>{item}</li>
