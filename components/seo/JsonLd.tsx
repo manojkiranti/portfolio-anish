@@ -6,6 +6,7 @@ export function JsonLd() {
     "@type": "Person",
     name: siteConfig.name,
     url: siteConfig.baseUrl,
+    image: new URL(siteConfig.avatarImage, siteConfig.baseUrl).toString(),
     jobTitle: siteConfig.title,
     worksFor: {
       "@type": "Organization",

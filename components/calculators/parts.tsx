@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useId, useState, type CSSProperties, type ReactNode } from "react";
 import type { Tone } from "@/lib/calculators";
 import { formatNumber } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -147,11 +147,29 @@ export type WorksheetRow = {
   label: ReactNode;
   value: ReactNode;
   kind?: "line" | "subtotal" | "note" | "total";
+  control?: ReactNode;
 };
 
-export function Worksheet({ rows, caption }: { rows: WorksheetRow[]; caption?: ReactNode }) {
+export function Worksheet({
+  rows,
+  caption,
+  footer,
+  variant = "tool",
+}: {
+  rows: WorksheetRow[];
+  caption?: ReactNode;
+  footer?: ReactNode;
+  variant?: "tool" | "hero";
+}) {
+  const hero = variant === "hero";
   return (
-    <div className="relative rounded-md border border-border bg-card py-3 pr-5 pl-10 tabular-nums lining-nums before:absolute before:inset-y-0 before:left-6 before:w-px before:bg-margin">
+    <div
+      data-enter={hero ? "" : undefined}
+      className={cn(
+        "relative rounded-md border border-border bg-card pr-5 pl-10 tabular-nums lining-nums before:absolute before:inset-y-0 before:left-6 before:w-px before:bg-margin",
+        hero ? "py-5" : "py-3"
+      )}
+    >
       {caption && (
         <p className="mb-2 flex items-baseline justify-between gap-4 text-[0.8125rem] text-muted-foreground">
           {caption}
@@ -159,22 +177,31 @@ export function Worksheet({ rows, caption }: { rows: WorksheetRow[]; caption?: R
       )}
       <dl>
         {rows.map((row, i) => (
-          <WorksheetLine key={i} row={row} />
+          <WorksheetLine key={i} row={row} index={i} large={hero} />
         ))}
       </dl>
+      {footer && <div className="mt-4 text-[0.8125rem] leading-normal text-muted-foreground">{footer}</div>}
     </div>
   );
 }
 
-function WorksheetLine({ row }: { row: WorksheetRow }) {
+function WorksheetLine({ row, index, large }: { row: WorksheetRow; index: number; large: boolean }) {
   const kind = row.kind ?? "line";
+  const stagger = { "--row": index } as CSSProperties;
   if (kind === "total") {
     return (
       <div className="flex items-baseline justify-between gap-4 pt-4 pb-2">
         <dt className="text-[1.0625rem] font-extrabold">{row.label}</dt>
-        <dd aria-live="polite" className="relative text-[1.625rem] leading-none font-extrabold tracking-[-0.01em]">
+        <dd
+          aria-live="polite"
+          style={stagger}
+          className={cn(
+            "enter-figure relative leading-none font-extrabold tracking-[-0.01em]",
+            large ? "text-[1.875rem]" : "text-[1.625rem]"
+          )}
+        >
           {row.value}
-          <span aria-hidden className="absolute inset-x-0 -bottom-2 h-1 border-y border-margin" />
+          <span aria-hidden style={stagger} className="draw-rule absolute inset-x-0 -bottom-2 h-1 border-y border-margin" />
         </dd>
       </div>
     );
@@ -184,12 +211,47 @@ function WorksheetLine({ row }: { row: WorksheetRow }) {
       className={cn(
         "grid grid-cols-[1fr_auto] items-baseline gap-x-4 border-b border-border text-[0.9375rem]",
         kind === "subtotal" && "-mt-px border-t border-t-foreground font-bold",
-        kind === "note" && "text-sm text-muted-foreground"
+        kind === "note" && "text-[0.8125rem] text-muted-foreground"
       )}
     >
-      <dt className="py-2">{row.label}</dt>
-      <dd className="py-2 text-right">{row.value}</dd>
+      <dt className="py-2 text-pretty">{row.label}</dt>
+      <dd style={stagger} className="enter-figure py-2 text-right">
+        {row.value}
+      </dd>
+      {row.control && <dd className="col-span-2 pb-2">{row.control}</dd>}
     </div>
+  );
+}
+
+export function Slider({
+  labelledBy,
+  value,
+  min,
+  max,
+  step,
+  onChange,
+  valueText,
+}: {
+  labelledBy: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  onChange: (value: number) => void;
+  valueText: string;
+}) {
+  return (
+    <input
+      type="range"
+      aria-labelledby={labelledBy}
+      aria-valuetext={valueText}
+      min={min}
+      max={max}
+      step={step}
+      value={value}
+      onChange={(e) => onChange(Number(e.target.value))}
+      className="block h-6 w-full cursor-pointer accent-foreground"
+    />
   );
 }
 

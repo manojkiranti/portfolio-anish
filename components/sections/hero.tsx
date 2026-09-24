@@ -1,74 +1,68 @@
-import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
+import { HeroWorksheet } from "@/components/calculators/hero-worksheet";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, FileText, MapPin } from "lucide-react";
-import { siteConfig, heroStats } from "@/lib/content";
+import { containerClass } from "@/components/sections/section";
+import { linkTargetProps } from "@/lib/contact";
+import { heroActions, heroFacts, siteConfig } from "@/lib/content";
+import { cn } from "@/lib/utils";
 
 export function Hero() {
+  const { primary, secondary } = heroActions;
   return (
-    <section
-      id="content"
-      className="relative overflow-hidden pt-40 pb-20 sm:pt-48 sm:pb-28"
-    >
-      {/* grid glow backdrop */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8892b020_1px,transparent_1px),linear-gradient(to_bottom,#8892b020_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_60%,transparent_100%)]" />
-      <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-96 w-[42rem] rounded-full bg-accent/10 blur-3xl" />
-
-      <div className="relative z-10 mx-auto max-w-4xl px-4 flex flex-col items-center text-center gap-7 animate-fade-in-up">
-        <Avatar className="size-28 sm:size-32 border-4 border-card shadow-xl animate-float">
-          <AvatarImage src={siteConfig.avatarImage} alt={siteConfig.name} />
-          <AvatarFallback className="bg-primary text-primary-foreground text-3xl">
-            {siteConfig.initials}
-          </AvatarFallback>
-        </Avatar>
-
-        <div className="flex items-center gap-2">
-          <Badge variant="gold">{siteConfig.title}</Badge>
-          <Badge variant="outline" className="gap-1.5">
-            <MapPin className="h-3 w-3" />
-            {siteConfig.locationShort}
-          </Badge>
+    <section id="content" aria-label="Introduction">
+      <div
+        className={cn(
+          containerClass,
+          "grid gap-8 pt-8 pb-12 md:grid-cols-12 md:gap-x-14 md:gap-y-10 md:pt-14 md:pb-16"
+        )}
+      >
+        <div className="md:col-span-7">
+          <Image
+            src={siteConfig.avatarImage}
+            alt={siteConfig.name}
+            width={88}
+            height={88}
+            loading="eager"
+            fetchPriority="high"
+            className="mb-4 size-[4.5rem] rounded-md object-cover md:mb-5.5 md:size-22"
+          />
+          <h1 className="mb-5 max-w-[9ch] text-[2.75rem] leading-[0.95] font-extrabold tracking-[-0.025em] md:text-7xl">
+            {siteConfig.name}
+          </h1>
+          <p className="mb-6 max-w-[30ch] text-lg leading-[1.45] text-muted-foreground md:mb-7 md:text-[1.3125rem]">
+            {siteConfig.tagline}
+          </p>
+          <div className="flex flex-wrap items-center gap-5">
+            <Button asChild>
+              <a href={primary.href} {...linkTargetProps(primary.external)}>
+                {primary.label}
+              </a>
+            </Button>
+            {secondary && (
+              <Button asChild variant="link" size="inline">
+                <a href={secondary.href} {...linkTargetProps(secondary.external)}>
+                  {secondary.label}
+                </a>
+              </Button>
+            )}
+          </div>
         </div>
 
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
-          {siteConfig.name}
-        </h1>
-
-        <p className="max-w-xl text-base sm:text-lg text-muted-foreground leading-relaxed">
-          {siteConfig.tagline}
-        </p>
-
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <Link href="#contact">
-            <Button variant="gold" size="default" className="gap-2">
-              Get in Touch
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
-          <Link href={siteConfig.resumeUrl} target="_blank" rel="noopener noreferrer">
-            <Button variant="outline" size="default" className="gap-2">
-              <FileText className="h-4 w-4" />
-              Download Resume
-            </Button>
-          </Link>
+        <div className="md:col-span-5 md:col-start-8 md:row-span-2 md:row-start-1">
+          <HeroWorksheet />
         </div>
 
-        <div className="mt-6 grid w-full grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          {heroStats.map((stat) => (
+        <dl className="max-w-[27.5rem] self-start text-[0.9375rem] md:col-span-7 md:row-start-2">
+          {heroFacts.map((fact) => (
             <div
-              key={stat.label}
-              className="rounded-2xl border border-border bg-card px-4 py-5 flex flex-col items-center gap-1"
+              key={fact.label}
+              className="grid grid-cols-[6.25rem_1fr] border-t border-border py-2.5 md:grid-cols-[7.5rem_1fr]"
             >
-              <span className="text-lg sm:text-xl font-bold text-accent-strong dark:text-accent leading-tight">
-                {stat.value}
-              </span>
-              <span className="text-xs text-muted-foreground text-center leading-tight">
-                {stat.label}
-              </span>
+              <dt className="text-muted-foreground">{fact.label}</dt>
+              <dd>{fact.value}</dd>
             </div>
           ))}
-        </div>
+        </dl>
       </div>
     </section>
   );

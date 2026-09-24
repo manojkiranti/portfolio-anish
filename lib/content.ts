@@ -7,25 +7,40 @@
 // ---------------------------------------------------------------------------
 
 import type { ChecklistItem } from "@/lib/calculators";
+import { buildContactAction, buildHeroActions } from "@/lib/contact";
 
-export const siteConfig = {
-  name: "Anesh Thapa Magar",
-  initials: "ATM",
-  title: "Credit Analyst",
-  tagline: "Turning complex financial profiles into confident lending decisions.",
-  baseUrl: "https://anesh-thapa.vercel.app",
-  locationShort: "Nepal & Australia",
-  email: "anish.thapamagar@example.com", // PLACEHOLDER — replace with real email
-  linkedin: "https://www.linkedin.com/in/anesh-thapa-magar-aa29501a0/",
-  resumeUrl: "/resume.pdf", // add the real file to /public/resume.pdf
-  avatarImage: "/profile.jpg",
+type SiteConfig = {
+  name: string;
+  title: string;
+  tagline: string;
+  baseUrl: string;
+  locationShort: string;
+  email: string | null;
+  linkedin: string;
+  resumeUrl: string | null;
+  avatarImage: string;
 };
 
-export const heroStats = [
-  { label: "Years Experience", value: "4+" },
-  { label: "Applications Assessed", value: "1,000+" }, // PLACEHOLDER figure
-  { label: "Based Across", value: "2 Countries" },
-  { label: "Currently At", value: "ODIN Mortgage" },
+export const siteConfig: SiteConfig = {
+  name: "Anesh Thapa Magar",
+  title: "Credit Analyst",
+  tagline: "Credit Analyst assessing Australian home loans the way the lender will.",
+  baseUrl: "https://anesh-thapa.vercel.app",
+  locationShort: "Nepal & Australia",
+  email: null, // Set a real address to switch every "Message on LinkedIn" action to "Email Anesh".
+  linkedin: "https://www.linkedin.com/in/anesh-thapa-magar-aa29501a0/",
+  resumeUrl: null, // Add the PDF to /public and set its path to show the Resume links.
+  avatarImage: "/anesh-thapa-magar.jpg",
+};
+
+export const resumeHref = siteConfig.resumeUrl?.trim() || null;
+export const contactAction = buildContactAction(siteConfig.email, siteConfig.linkedin);
+export const heroActions = buildHeroActions(resumeHref, contactAction);
+
+export const heroFacts = [
+  { label: "Currently", value: "Credit Analyst, ODIN Mortgage" },
+  { label: "Experience", value: "4+ years in Australian lending" },
+  { label: "Based", value: "Nepal and Australia" },
 ];
 
 export const about = {
@@ -235,20 +250,18 @@ export const education: EducationEntry[] = [
 ];
 
 export const contactCards = [
-  {
-    label: "Email",
-    value: siteConfig.email,
-    href: `mailto:${siteConfig.email}`,
-  },
+  ...(siteConfig.email
+    ? [{ label: "Email", value: siteConfig.email, href: `mailto:${siteConfig.email}` as string | undefined }]
+    : []),
   {
     label: "LinkedIn",
     value: "linkedin.com/in/anesh-thapa-magar-aa29501a0",
-    href: siteConfig.linkedin,
+    href: siteConfig.linkedin as string | undefined,
   },
   {
     label: "Location",
     value: "Nepal & Australia",
-    href: undefined,
+    href: undefined as string | undefined,
   },
 ];
 

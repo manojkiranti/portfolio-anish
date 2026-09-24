@@ -4,20 +4,18 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-[0.9375rem] font-semibold transition-colors disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:opacity-90",
-        gold: "bg-accent text-accent-foreground hover:opacity-90 shadow-sm",
-        outline:
-          "border border-border bg-transparent hover:bg-secondary text-foreground",
-        ghost: "hover:bg-secondary text-foreground",
+        default: "rounded-lg bg-primary text-primary-foreground hover:bg-primary/90",
+        ghost: "rounded-md text-foreground hover:bg-secondary",
+        link: "rounded-sm text-foreground underline decoration-1 underline-offset-4 hover:decoration-2",
       },
       size: {
-        default: "h-10 px-5 py-2",
-        sm: "h-9 px-4",
-        icon: "h-10 w-10",
+        default: "h-11 px-[1.125rem]",
+        icon: "size-10",
+        inline: "h-auto p-0",
       },
     },
     defaultVariants: {
@@ -36,12 +34,7 @@ function Button({
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & { asChild?: boolean }) {
   const Comp = asChild ? Slot : "button";
-  return (
-    <Comp
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  );
+  return <Comp className={cn(buttonVariants({ variant, size, className }))} {...props} />;
 }
 
 export { Button, buttonVariants };
