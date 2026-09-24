@@ -29,7 +29,7 @@ export const heroStats = [
 ];
 
 export const about = {
-  heading: "About",
+  heading: "Profile",
   paragraphs: [
     "Anesh is a Credit Analyst with four years of experience assessing residential and investment lending applications for Australian borrowers. Splitting his time between Nepal and Australia, he combines meticulous financial analysis with a genuine understanding of the pressures brokers and clients face when navigating a loan application.",
     "At ODIN Mortgage, an Australian mortgage broker, he works closely with brokers to structure serviceability calculations, verify supporting documentation, and get complex applications loan-ready — turning around clean, lender-friendly submissions that move files forward with fewer conditions and less back-and-forth.",
@@ -41,7 +41,6 @@ export type ExperienceEntry = {
   company: string;
   location: string;
   period: string;
-  current?: boolean;
   bullets: string[];
 };
 
@@ -49,9 +48,8 @@ export const experience: ExperienceEntry[] = [
   {
     role: "Credit Analyst",
     company: "ODIN Mortgage",
-    location: "Australia (remote from Nepal & Australia)",
-    period: "2023 — Present", // PLACEHOLDER dates
-    current: true,
+    location: "Australia (remote from Nepal and Australia)",
+    period: "2023 – now", // PLACEHOLDER dates
     bullets: [
       "Assess serviceability and credit files for residential and investment loan applications against lender policy.",
       "Review income, employment, and asset documentation for accuracy and lender-readiness before submission.",
@@ -63,7 +61,7 @@ export const experience: ExperienceEntry[] = [
     role: "Credit Analyst", // PLACEHOLDER role title
     company: "[Previous Company]", // PLACEHOLDER
     location: "Nepal",
-    period: "2021 — 2023", // PLACEHOLDER dates
+    period: "2021 – 2023", // PLACEHOLDER dates
     bullets: [
       "Analysed financial statements and credit history to support lending recommendations.",
       "Prepared structured credit assessment reports for underwriting review.",
@@ -79,30 +77,30 @@ export type SkillGroup = {
 
 export const skillGroups: SkillGroup[] = [
   {
-    heading: "Credit & Risk Assessment",
+    heading: "Credit & risk",
     skills: [
-      "Serviceability Analysis",
-      "Credit Risk Assessment",
-      "Financial Statement Analysis",
-      "Loan Structuring",
+      "Serviceability analysis",
+      "Credit risk assessment",
+      "Financial statement analysis",
+      "Loan structuring",
     ],
   },
   {
-    heading: "Compliance & Lending",
+    heading: "Compliance & lending",
     skills: [
-      "Responsible Lending (NCCP)",
-      "AML / KYC Verification",
-      "Lender Policy Interpretation",
-      "Documentation Review",
+      "Responsible lending (NCCP)",
+      "AML / KYC verification",
+      "Lender policy interpretation",
+      "Documentation review",
     ],
   },
   {
-    heading: "Tools & Communication",
+    heading: "Tools & communication",
     skills: [
-      "Loan Management CRMs",
-      "Microsoft Excel / Financial Modelling",
-      "Broker & Lender Liaison",
-      "Attention to Detail",
+      "Loan management CRMs",
+      "Excel and financial modelling",
+      "Broker and lender liaison",
+      "Attention to detail",
     ],
   },
 ];
@@ -229,12 +227,12 @@ export const education: EducationEntry[] = [
   {
     qualification: "Bachelor of Business Administration (BBA)",
     institution: "Tribhuvan University, Nepal",
-    period: "2018 — 2024",
+    period: "2018 – 2024",
   },
   {
     qualification: "Master of Arts in Economics",
     institution: "Tribhuvan University, Nepal",
-    period: "2024 — Present", // PLACEHOLDER — confirm exact end year
+    period: "2024 – now", // PLACEHOLDER — confirm exact end year
   },
 ];
 

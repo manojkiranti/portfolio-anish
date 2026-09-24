@@ -1,19 +1,15 @@
+import { Section } from "@/components/sections/section";
 import { about } from "@/lib/content";
 
 export function About() {
   return (
-    <section id="about" className="py-20 sm:py-28">
-      <div className="mx-auto max-w-3xl px-4">
-        <SectionHeading eyebrow="Who I Am" heading={about.heading} />
-        <div className="space-y-5">
-          {about.paragraphs.map((p, i) => (
-            <p key={i} className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-              {p}
-            </p>
-          ))}
-        </div>
+    <Section id="about" heading={about.heading}>
+      <div className="max-w-[62ch] space-y-4">
+        {about.paragraphs.map((paragraph) => (
+          <p key={paragraph.slice(0, 40)}>{paragraph}</p>
+        ))}
       </div>
-    </section>
+    </Section>
   );
 }
 

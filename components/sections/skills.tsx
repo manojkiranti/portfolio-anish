@@ -1,31 +1,23 @@
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Section } from "@/components/sections/section";
 import { skillGroups } from "@/lib/content";
-import { SectionHeading } from "@/components/sections/about";
 
 export function Skills() {
   return (
-    <section id="skills" className="py-20 sm:py-28">
-      <div className="mx-auto max-w-5xl px-4">
-        <SectionHeading eyebrow="Expertise" heading="Skills & Focus Areas" />
-
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {skillGroups.map((group) => (
-            <Card key={group.heading} className="hover:border-accent/40 transition-colors">
-              <CardHeader>
-                <CardTitle className="text-base">{group.heading}</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-wrap gap-2 pt-0">
-                {group.skills.map((skill) => (
-                  <Badge key={skill} variant="default">
-                    {skill}
-                  </Badge>
-                ))}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+    <Section id="skills" heading="Skills">
+      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-7">
+        {skillGroups.map((group) => (
+          <div key={group.heading}>
+            <h3 className="mb-1.5 text-base font-bold">{group.heading}</h3>
+            <ul className="text-[0.9375rem]">
+              {group.skills.map((skill) => (
+                <li key={skill} className="border-t border-border py-[0.4375rem]">
+                  {skill}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
-    </section>
+    </Section>
   );
 }

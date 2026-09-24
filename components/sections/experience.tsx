@@ -1,39 +1,30 @@
-import { Badge } from "@/components/ui/badge";
+import { Section } from "@/components/sections/section";
 import { experience } from "@/lib/content";
-import { SectionHeading } from "@/components/sections/about";
 
 export function Experience() {
   return (
-    <section id="experience" className="py-20 sm:py-28 bg-secondary/40">
-      <div className="mx-auto max-w-3xl px-4">
-        <SectionHeading eyebrow="Career" heading="Experience" />
-
-        <ol className="relative border-l border-border pl-8 space-y-10">
-          {experience.map((job) => (
-            <li key={`${job.company}-${job.period}`} className="relative">
-              <span className="absolute -left-[calc(2rem+5px)] top-1.5 size-3 rounded-full bg-accent ring-4 ring-background" />
-              <div className="flex flex-wrap items-center gap-2 mb-1">
-                <h3 className="text-lg font-bold">{job.role}</h3>
-                {job.current && <Badge variant="gold">Current</Badge>}
-              </div>
-              <p className="text-sm font-medium text-foreground/80">
-                {job.company} &middot; {job.location}
+    <Section id="experience" heading="Experience">
+      <ol className="divide-y divide-border">
+        {experience.map((job) => (
+          <li
+            key={`${job.company}-${job.period}`}
+            className="grid gap-1 py-5 first:pt-0 last:pb-0 sm:grid-cols-[8rem_1fr] sm:gap-5"
+          >
+            <p className="pt-0.5 text-[0.9375rem] text-muted-foreground tabular-nums">{job.period}</p>
+            <div>
+              <h3 className="text-[1.1875rem] font-bold">{job.role}</h3>
+              <p className="mb-2 text-[0.9375rem] text-muted-foreground">
+                {job.company}, {job.location}
               </p>
-              <p className="text-sm text-muted-foreground mb-3">{job.period}</p>
-              <ul className="space-y-1.5">
-                {job.bullets.map((bullet, i) => (
-                  <li
-                    key={i}
-                    className="text-sm sm:text-base text-muted-foreground leading-relaxed pl-4 relative before:content-['—'] before:absolute before:left-0 before:text-accent-strong dark:before:text-accent"
-                  >
-                    {bullet}
-                  </li>
+              <ul className="list-disc space-y-1 pl-[1.125rem] text-[0.96875rem] leading-[1.55] marker:text-muted-foreground">
+                {job.bullets.map((bullet) => (
+                  <li key={bullet}>{bullet}</li>
                 ))}
               </ul>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </Section>
   );
 }
