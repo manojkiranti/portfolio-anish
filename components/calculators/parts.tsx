@@ -190,13 +190,13 @@ function WorksheetLine({ row, index, large }: { row: WorksheetRow; index: number
   const stagger = { "--row": index } as CSSProperties;
   if (kind === "total") {
     return (
-      <div className="flex items-baseline justify-between gap-4 pt-4 pb-2">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 pt-4 pb-2">
         <dt className="text-[1.0625rem] font-extrabold">{row.label}</dt>
         <dd
           aria-live="polite"
           style={stagger}
           className={cn(
-            "enter-figure relative leading-none font-extrabold tracking-[-0.01em]",
+            "enter-figure relative ml-auto leading-none font-extrabold tracking-[-0.01em]",
             large ? "text-[1.875rem]" : "text-[1.625rem]"
           )}
         >
