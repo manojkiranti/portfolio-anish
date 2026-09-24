@@ -12,20 +12,3 @@ export function About() {
     </Section>
   );
 }
-
-export function SectionHeading({
-  eyebrow,
-  heading,
-}: {
-  eyebrow: string;
-  heading: string;
-}) {
-  return (
-    <div className="mb-8 space-y-2">
-      <p className="text-sm font-semibold uppercase tracking-widest text-accent-strong dark:text-accent">
-        {eyebrow}
-      </p>
-      <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">{heading}</h2>
-    </div>
-  );
-}

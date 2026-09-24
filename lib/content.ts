@@ -249,21 +249,23 @@ export const education: EducationEntry[] = [
   },
 ];
 
-export const contactCards = [
-  ...(siteConfig.email
-    ? [{ label: "Email", value: siteConfig.email, href: `mailto:${siteConfig.email}` as string | undefined }]
-    : []),
-  {
-    label: "LinkedIn",
-    value: "linkedin.com/in/anesh-thapa-magar-aa29501a0",
-    href: siteConfig.linkedin as string | undefined,
-  },
-  {
-    label: "Location",
-    value: "Nepal & Australia",
-    href: undefined as string | undefined,
-  },
-];
+export type ContactRow = { label: string; value: string; href?: string };
+
+export const contact: { heading: string; sentence: string; rows: ContactRow[] } = {
+  heading: "Contact",
+  sentence: "Open to credit analyst roles and conversations about Australian lending.",
+  rows: [
+    ...(siteConfig.email
+      ? [{ label: "Email", value: siteConfig.email, href: `mailto:${siteConfig.email}` }]
+      : []),
+    {
+      label: "LinkedIn",
+      value: "linkedin.com/in/anesh-thapa-magar-aa29501a0",
+      href: siteConfig.linkedin,
+    },
+    { label: "Based", value: "Nepal and Australia" },
+  ],
+};
 
 export type SliderRange = { min: number; max: number; step: number; initial: number };
 

@@ -1,13 +1,17 @@
+import { containerClass } from "@/components/sections/section";
 import { siteConfig } from "@/lib/content";
+import { cn } from "@/lib/utils";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border py-8">
-      <div className="mx-auto max-w-6xl px-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-muted-foreground">
+    <footer className="border-t border-border">
+      <div className={cn(containerClass, "flex items-center justify-between gap-4 py-5 text-sm text-muted-foreground")}>
         <p>
-          &copy; {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+          © {new Date().getFullYear()} {siteConfig.name}
         </p>
-        <p>{siteConfig.title} &middot; {siteConfig.locationShort}</p>
+        <a href="#" className="rounded-sm underline underline-offset-4 hover:text-foreground">
+          Back to top
+        </a>
       </div>
     </footer>
   );

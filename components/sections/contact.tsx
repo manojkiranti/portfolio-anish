@@ -1,60 +1,42 @@
-import Link from "next/link";
-import { Mail, MapPin, ArrowUpRight, type LucideIcon } from "lucide-react";
-import { FaLinkedin } from "react-icons/fa";
-import { contactCards, siteConfig } from "@/lib/content";
-import { SectionHeading } from "@/components/sections/about";
-
-const ICONS: Record<string, LucideIcon | typeof FaLinkedin> = {
-  Email: Mail,
-  LinkedIn: FaLinkedin,
-  Location: MapPin,
-};
+import { Button } from "@/components/ui/button";
+import { Section } from "@/components/sections/section";
+import { linkTargetProps } from "@/lib/contact";
+import { contact, contactAction } from "@/lib/content";
 
 export function Contact() {
   return (
-    <section id="contact" className="py-20 sm:py-28 bg-secondary/40">
-      <div className="mx-auto max-w-3xl px-4 text-center">
-        <SectionHeading eyebrow="Let's Connect" heading="Get in Touch" />
-        <p className="text-muted-foreground max-w-xl mx-auto mb-10 -mt-2">
-          Open to conversations about credit analysis, mortgage broking
-          operations, or opportunities across {siteConfig.locationShort}.
-        </p>
-
-        <div className="grid gap-4 sm:grid-cols-3">
-          {contactCards.map((card) => {
-            const Icon = ICONS[card.label] ?? Mail;
-            const content = (
-              <div className="flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-6 h-full transition-colors hover:border-accent/40">
-                <div className="flex size-10 items-center justify-center rounded-full bg-accent/10 text-accent-strong dark:text-accent">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold">{card.label}</p>
-                  <p className="text-sm text-muted-foreground break-all">
-                    {card.value}
-                  </p>
-                </div>
-                {card.href && (
-                  <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
-                )}
-              </div>
-            );
-
-            return card.href ? (
-              <Link
-                key={card.label}
-                href={card.href}
-                target={card.href.startsWith("http") ? "_blank" : undefined}
-                rel={card.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              >
-                {content}
-              </Link>
-            ) : (
-              <div key={card.label}>{content}</div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
+    <Section id="contact" heading={contact.heading}>
+      <p className="mb-5 max-w-[32ch] text-2xl leading-[1.35] font-semibold tracking-[-0.01em]">
+        {contact.sentence}
+      </p>
+      <dl className="max-w-[40rem]">
+        {contact.rows.map((row) => (
+          <div
+            key={row.label}
+            className="grid grid-cols-[6.25rem_1fr] gap-x-4 border-t border-border py-3 first:border-t-0 first:pt-0.5 sm:grid-cols-[8rem_1fr]"
+          >
+            <dt className="text-[0.9375rem] text-muted-foreground">{row.label}</dt>
+            <dd className="min-w-0 [overflow-wrap:anywhere]">
+              {row.href ? (
+                <a
+                  href={row.href}
+                  {...linkTargetProps(row.href.startsWith("http"))}
+                  className="rounded-sm underline decoration-1 underline-offset-4 hover:decoration-2"
+                >
+                  {row.value}
+                </a>
+              ) : (
+                row.value
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+      <Button asChild className="mt-6">
+        <a href={contactAction.href} {...linkTargetProps(contactAction.external)}>
+          {contactAction.label}
+        </a>
+      </Button>
+    </Section>
   );
 }
