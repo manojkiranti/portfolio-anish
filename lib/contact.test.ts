@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildContactAction, buildHeroActions, linkTargetProps } from "@/lib/contact";
+import { buildContactAction, buildContactRows, buildHeroActions, linkTargetProps } from "@/lib/contact";
 
 const LINKEDIN = "https://www.linkedin.com/in/example/";
 
@@ -45,5 +45,24 @@ describe("linkTargetProps", () => {
   it("opens external links in a new tab safely", () => {
     expect(linkTargetProps(true)).toEqual({ target: "_blank", rel: "noopener noreferrer" });
     expect(linkTargetProps(false)).toEqual({});
+  });
+});
+
+describe("buildContactRows", () => {
+  const rest = [
+    { label: "LinkedIn", value: "linkedin.com/in/example", href: LINKEDIN },
+    { label: "Based", value: "Nepal and Australia" },
+  ];
+
+  it("leads with a trimmed email row when an address is set", () => {
+    expect(buildContactRows(" anesh@example.org ", rest)).toEqual([
+      { label: "Email", value: "anesh@example.org", href: "mailto:anesh@example.org" },
+      ...rest,
+    ]);
+  });
+
+  it("leaves the email row out when there is no address or only whitespace", () => {
+    expect(buildContactRows(null, rest)).toEqual(rest);
+    expect(buildContactRows("   ", rest)).toEqual(rest);
   });
 });

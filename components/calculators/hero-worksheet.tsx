@@ -69,7 +69,7 @@ export function HeroWorksheet() {
         { kind: "subtotal", label: "Monthly surplus", value: formatAccounting(r.monthlySurplus) },
         {
           kind: "note",
-          label: `Assessed at ${formatPct(cfg.annualRatePct, 2)} + ${formatPct(ASSUMPTIONS.serviceabilityBufferPct, 2)} buffer, ${cfg.termYears} years`,
+          label: `Example rate ${formatPct(cfg.annualRatePct, 2)} + ${formatPct(ASSUMPTIONS.serviceabilityBufferPct, 2)} buffer, ${cfg.termYears} years`,
           value: formatPct(r.assessmentRatePct, 2),
         },
         {

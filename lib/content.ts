@@ -7,7 +7,7 @@
 // ---------------------------------------------------------------------------
 
 import type { ChecklistItem } from "@/lib/calculators";
-import { buildContactAction, buildHeroActions } from "@/lib/contact";
+import { buildContactAction, buildContactRows, buildHeroActions, type ContactRow } from "@/lib/contact";
 
 type SiteConfig = {
   name: string;
@@ -249,22 +249,17 @@ export const education: EducationEntry[] = [
   },
 ];
 
-export type ContactRow = { label: string; value: string; href?: string };
-
 export const contact: { heading: string; sentence: string; rows: ContactRow[] } = {
   heading: "Contact",
   sentence: "Open to credit analyst roles and conversations about Australian lending.",
-  rows: [
-    ...(siteConfig.email
-      ? [{ label: "Email", value: siteConfig.email, href: `mailto:${siteConfig.email}` }]
-      : []),
+  rows: buildContactRows(siteConfig.email, [
     {
       label: "LinkedIn",
       value: "linkedin.com/in/anesh-thapa-magar-aa29501a0",
       href: siteConfig.linkedin,
     },
     { label: "Based", value: "Nepal and Australia" },
-  ],
+  ]),
 };
 
 export type SliderRange = { min: number; max: number; step: number; initial: number };
