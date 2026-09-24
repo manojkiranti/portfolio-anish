@@ -4,7 +4,7 @@ import { SectionHeading } from "@/components/sections/about";
 
 export function Education() {
   return (
-    <section id="education" className="py-20 sm:py-28 bg-secondary/40">
+    <section id="education" className="py-20 sm:py-28">
       <div className="mx-auto max-w-3xl px-4">
         <SectionHeading eyebrow="Background" heading="Education & Certifications" />
 

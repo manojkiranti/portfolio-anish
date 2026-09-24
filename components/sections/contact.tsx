@@ -12,7 +12,7 @@ const ICONS: Record<string, LucideIcon | typeof FaLinkedin> = {
 
 export function Contact() {
   return (
-    <section id="contact" className="py-20 sm:py-28">
+    <section id="contact" className="py-20 sm:py-28 bg-secondary/40">
       <div className="mx-auto max-w-3xl px-4 text-center">
         <SectionHeading eyebrow="Let's Connect" heading="Get in Touch" />
         <p className="text-muted-foreground max-w-xl mx-auto mb-10 -mt-2">

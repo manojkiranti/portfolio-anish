@@ -6,6 +6,8 @@
 // visitors as-is — they're just comments/flags for you while editing).
 // ---------------------------------------------------------------------------
 
+import type { ChecklistItem } from "@/lib/calculators";
+
 export const siteConfig = {
   name: "Anesh Thapa Magar",
   initials: "ATM",
@@ -101,6 +103,118 @@ export const skillGroups: SkillGroup[] = [
       "Microsoft Excel / Financial Modelling",
       "Broker & Lender Liaison",
       "Attention to Detail",
+    ],
+  },
+];
+
+export const toolkit = {
+  eyebrow: "Interactive",
+  heading: "Credit Toolkit",
+  intro:
+    "The core checks behind a credit assessment, as working calculators. Change the numbers and follow the logic: how the assessment buffer shapes borrowing power, why LVR and DTI bands matter, and what makes a file ready to submit.",
+  disclaimer:
+    "Illustrative only. These tools show general assessment logic. They are not financial advice or credit assistance, and every lender's policy differs. Nothing you enter leaves your browser.",
+};
+
+export const checklistGroups: { heading: string; items: ChecklistItem[] }[] = [
+  {
+    heading: "Identity",
+    items: [
+      {
+        id: "id",
+        label: "Photo ID plus secondary ID",
+        hint: "Passport or driver licence, plus e.g. a Medicare card, for verification of identity.",
+        critical: true,
+        appliesTo: ["payg", "self-employed"],
+      },
+    ],
+  },
+  {
+    heading: "Income",
+    items: [
+      {
+        id: "payslips",
+        label: "Two most recent payslips",
+        critical: true,
+        appliesTo: ["payg"],
+      },
+      {
+        id: "income-statement",
+        label: "Latest income statement (PAYG summary)",
+        hint: "Supports bonus, overtime or allowance income.",
+        critical: false,
+        appliesTo: ["payg"],
+      },
+      {
+        id: "employment-letter",
+        label: "Employment letter",
+        hint: "Needed if on probation, recently changed jobs, or relying on variable pay.",
+        critical: false,
+        appliesTo: ["payg"],
+      },
+      {
+        id: "tax-returns",
+        label: "Two years of personal & business tax returns",
+        critical: true,
+        appliesTo: ["self-employed"],
+      },
+      {
+        id: "noas",
+        label: "Matching ATO notices of assessment",
+        critical: true,
+        appliesTo: ["self-employed"],
+      },
+      {
+        id: "bas",
+        label: "Recent BAS statements",
+        hint: "Shows current-year trading since the last return.",
+        critical: false,
+        appliesTo: ["self-employed"],
+      },
+    ],
+  },
+  {
+    heading: "Banking & liabilities",
+    items: [
+      {
+        id: "transaction-statements",
+        label: "Three months of transaction account statements",
+        hint: "Used to verify living expenses and spot undisclosed debts.",
+        critical: true,
+        appliesTo: ["payg", "self-employed"],
+      },
+      {
+        id: "savings",
+        label: "Savings statements showing the deposit",
+        hint: "Shows where the deposit and purchase costs are coming from.",
+        critical: true,
+        appliesTo: ["payg", "self-employed"],
+      },
+      {
+        id: "liabilities",
+        label: "Statements for every existing loan and credit card",
+        critical: true,
+        appliesTo: ["payg", "self-employed"],
+      },
+      {
+        id: "help",
+        label: "HELP / HECS balance, if any",
+        hint: "From myGov. Repayments reduce serviceability.",
+        critical: false,
+        appliesTo: ["payg", "self-employed"],
+      },
+    ],
+  },
+  {
+    heading: "Property",
+    items: [
+      {
+        id: "contract",
+        label: "Signed contract of sale (or current loan statements for a refinance)",
+        hint: "Not needed for a pre-approval.",
+        critical: false,
+        appliesTo: ["payg", "self-employed"],
+      },
     ],
   },
 ];
