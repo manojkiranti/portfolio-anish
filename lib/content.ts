@@ -255,3 +255,24 @@ export const contactCards = [
     href: undefined,
   },
 ];
+
+export type SliderRange = { min: number; max: number; step: number; initial: number };
+
+export type HeroWorksheetConfig = {
+  income: SliderRange;
+  expenses: SliderRange;
+  otherMonthlyRepayments: number;
+  creditCardLimits: number;
+  annualRatePct: number;
+  termYears: number;
+};
+
+// Fixed figures for the first-screen demo. The buffer and card factor come from ASSUMPTIONS.
+export const heroWorksheet: HeroWorksheetConfig = {
+  income: { min: 4_000, max: 20_000, step: 100, initial: 9_000 },
+  expenses: { min: 1_500, max: 10_000, step: 100, initial: 3_500 },
+  otherMonthlyRepayments: 400,
+  creditCardLimits: 10_000,
+  annualRatePct: 6,
+  termYears: 30,
+};

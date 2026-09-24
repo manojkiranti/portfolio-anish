@@ -229,3 +229,36 @@ describe("assessReadiness", () => {
     expect(r.missingCritical.map((i) => i.id)).toEqual(["tax-returns"]);
   });
 });
+
+import { heroWorksheet } from "@/lib/content";
+import { formatCurrency } from "@/lib/format";
+
+describe("hero worksheet config", () => {
+  const run = (netMonthlyIncome: number, monthlyExpenses: number) =>
+    calculateServiceability({
+      netMonthlyIncome,
+      monthlyExpenses,
+      otherMonthlyRepayments: heroWorksheet.otherMonthlyRepayments,
+      creditCardLimits: heroWorksheet.creditCardLimits,
+      annualRatePct: heroWorksheet.annualRatePct,
+      termYears: heroWorksheet.termYears,
+    });
+
+  it("shows $586,610 on first load", () => {
+    const r = run(heroWorksheet.income.initial, heroWorksheet.expenses.initial);
+    expect(formatCurrency(r.maxLoan)).toBe("$586,610");
+  });
+
+  it("starts each slider inside its range, on a step", () => {
+    for (const range of [heroWorksheet.income, heroWorksheet.expenses]) {
+      expect(range.initial).toBeGreaterThanOrEqual(range.min);
+      expect(range.initial).toBeLessThanOrEqual(range.max);
+      expect((range.initial - range.min) % range.step).toBe(0);
+      expect((range.max - range.min) % range.step).toBe(0);
+    }
+  });
+
+  it("can reach no capacity within the slider ranges", () => {
+    expect(run(heroWorksheet.income.min, heroWorksheet.expenses.max).maxLoan).toBe(0);
+  });
+});
