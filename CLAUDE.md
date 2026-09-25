@@ -96,6 +96,5 @@ Other branches normally get a Vercel preview URL.
 ## Open placeholders
 
 - `siteConfig.email` is `null`. Actions show "Message on LinkedIn" until a real address is set.
-- `siteConfig.resumeUrl` is `null`. Resume links are hidden until the PDF is in `public/` and its path is set.
 - Master of Arts in Economics end year: shown as "2024 – now".
 - The second `experience` entry (company and dates) and the first entry's dates.

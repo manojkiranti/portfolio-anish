@@ -29,7 +29,7 @@ export const siteConfig: SiteConfig = {
   locationShort: "Nepal & Australia",
   email: null, // Set a real address to switch every "Message on LinkedIn" action to "Email Anesh".
   linkedin: "https://www.linkedin.com/in/anesh-thapa-magar-aa29501a0/",
-  resumeUrl: null, // Add the PDF to /public and set its path to show the Resume links.
+  resumeUrl: "/resume.pdf",
   avatarImage: "/anesh-thapa-magar.jpg",
 };
 
